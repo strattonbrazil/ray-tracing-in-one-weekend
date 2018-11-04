@@ -30,8 +30,10 @@ bool sphere::hit(const ray &r, float t_min, float t_max, hit_record &record) con
     float temp = -(b + sqrt(b * b - a * c))/a;
     if (temp < t_max && temp > t_min) {
       record.t = temp;
-      record.p = r.point_at_parameter(temp);
-      record.normal = (record.p - _center) / _radius;
+      vec3 orig_p = r.point_at_parameter(temp);
+      record.normal = (orig_p - _center) / _radius;
+      vec3 surf_offset = record.normal * 0.00001;
+      record.p = r.point_at_parameter(temp) + surf_offset;
       record.mat = _material;
       return true;
     }
